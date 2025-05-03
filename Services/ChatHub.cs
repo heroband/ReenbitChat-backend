@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace backend;
+namespace backend.Services;
 
 public class ChatHub : Hub
 {
