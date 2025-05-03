@@ -1,4 +1,6 @@
-﻿using backend.Interfaces;
+﻿using backend.Dtos;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +19,21 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostMessage([FromBody] Message message)
+    public async Task<IActionResult> PostMessage([FromBody] CreateMessageDto dto)
     {
-        var savedMessage = await _messageRepository.AddAsync(message);
-        return Ok(savedMessage);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        var savedMessage = await _messageRepository.AddAsync(dto.ToEntity());
+        return Ok(savedMessage.ToDto());
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Message>> GetMessages()
+    public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
     {
-        return await _messageRepository.GetAllAsync();
+        var messages = await _messageRepository.GetAllAsync();
+        return Ok(messages.Select(m => m.ToDto()));
     }
 }
