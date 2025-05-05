@@ -6,6 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -25,6 +37,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Enviro
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowFrontend");
 app.MapControllers();
 app.UseHttpsRedirection();
 app.MapHub<ChatHub>("/chatHub");
