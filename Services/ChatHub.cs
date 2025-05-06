@@ -16,7 +16,8 @@ public class ChatHub : Hub
     }
     public async Task JoinChat(string username)
     {
-        await Clients.All.SendAsync("ReceiveMessage", "Admin", $"{username} приєднався до чату");
+        var systemMessage = MessageMapperExtensions.CreateSystemMessage($"{username} приєднався до чату");
+        await Clients.All.SendAsync("ReceiveMessage", systemMessage);
     }
     public async Task SendMessage(CreateMessageDto dto)
     {

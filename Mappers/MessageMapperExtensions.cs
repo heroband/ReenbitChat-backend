@@ -21,7 +21,19 @@ public static class MessageMapperExtensions
         {
             User = message.User,
             Text = message.Text,
-            Timestamp = message.Timestamp
+            Timestamp = message.Timestamp,
+            MessageType = "user"
+        };
+    }
+
+    public static MessageDto CreateSystemMessage(string text)
+    {
+        return new MessageDto
+        {
+            User = "System",
+            Text = text,
+            Timestamp = DateTime.UtcNow,
+            MessageType = "system"
         };
     }
 }
