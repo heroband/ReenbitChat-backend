@@ -40,6 +40,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Enviro
 app.UseCors("AllowFrontend");
 app.MapControllers();
 app.UseHttpsRedirection();
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
 
 app.Run();
