@@ -21,6 +21,7 @@ public static class MessageMapperExtensions
         {
             User = message.User,
             Text = message.Text,
+            Sentiment = message.Sentiment,
             Timestamp = message.Timestamp,
             MessageType = "user"
         };
@@ -32,6 +33,7 @@ public static class MessageMapperExtensions
         {
             User = "System",
             Text = text,
+            Sentiment = null,
             Timestamp = DateTime.UtcNow,
             MessageType = "system"
         };

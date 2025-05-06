@@ -1,7 +1,6 @@
 ﻿using backend.Dtos;
 using backend.Interfaces;
 using backend.Mappers;
-using backend.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace backend.Services;
@@ -9,10 +8,12 @@ namespace backend.Services;
 public class ChatHub : Hub
 {
     private readonly IMessageRepository _messageRepository;
+    private readonly SentimentService _sentimentService;
 
-    public ChatHub(IMessageRepository messageRepository)
+    public ChatHub(IMessageRepository messageRepository, SentimentService sentimentService)
     {
         _messageRepository = messageRepository;
+        _sentimentService = sentimentService;
     }
     public async Task JoinChat(string username)
     {
@@ -22,6 +23,7 @@ public class ChatHub : Hub
     public async Task SendMessage(CreateMessageDto dto)
     {
         var messageEntity = await _messageRepository.AddAsync(dto.ToEntity());
+        messageEntity.Sentiment = await _sentimentService.AnalyzeSentimentAsync(messageEntity.Text);
         await Clients.All.SendAsync("ReceiveMessage", messageEntity.ToDto());
     }
 }
