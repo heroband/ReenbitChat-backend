@@ -21,9 +21,9 @@ public class MessagesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+    public async Task<IActionResult> GetLastMessages()
     {
-        var messages = await _messageRepository.GetAllAsync();
+        var messages = await _messageRepository.GetLastMessagesAsync(10);
         return Ok(messages.Select(m => m.ToDto()));
     }
 }

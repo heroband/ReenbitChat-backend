@@ -13,14 +13,17 @@ public class MessageRepository : IMessageRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Message>> GetAllAsync()
+    public async Task<IEnumerable<Message>> GetLastMessagesAsync(int count)
     {
-        return await _context.Messages.OrderByDescending(m => m.Timestamp).ToListAsync();
+        return await _context.Messages
+            .OrderByDescending(m => m.Timestamp)
+            .Take(count)
+            .OrderBy(m => m.Timestamp)
+            .ToListAsync();
     }
 
     public async Task<Message> AddAsync(Message message)
     {
-        message.Timestamp = DateTime.UtcNow;
         _context.Messages.Add(message);
         await _context.SaveChangesAsync();
         return message;

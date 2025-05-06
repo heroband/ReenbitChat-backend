@@ -1,4 +1,6 @@
-﻿using backend.Interfaces;
+﻿using backend.Dtos;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,17 +18,9 @@ public class ChatHub : Hub
     {
         await Clients.All.SendAsync("ReceiveMessage", "Admin", $"{username} приєднався до чату");
     }
-    public async Task SendMessage(string user, string message)
+    public async Task SendMessage(CreateMessageDto dto)
     {
-        var msg = new Message
-        {
-            User = user,
-            Text = message
-        };
-
-        await _messageRepository.AddAsync(msg);
-
-        await Clients.All.SendAsync("ReceiveMessage", user, message);
+        var messageEntity = await _messageRepository.AddAsync(dto.ToEntity());
+        await Clients.All.SendAsync("ReceiveMessage", messageEntity.ToDto());
     }
-    
 }
