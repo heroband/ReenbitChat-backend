@@ -16,7 +16,15 @@ public class SentimentService
 
     public async Task<string> AnalyzeSentimentAsync(string text)
     {
-        var result = await _client.AnalyzeSentimentAsync(text);
-        return result.Value.Sentiment.ToString();
+        try
+        {
+            var result = await _client.AnalyzeSentimentAsync(text);
+            return result.Value.Sentiment.ToString();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Помилка в SentimentService: {ex.Message}");
+            throw;
+        }
     }
 }

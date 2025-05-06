@@ -22,8 +22,17 @@ public class ChatHubService : Hub
     }
     public async Task SendMessage(CreateMessageDto dto)
     {
-        var messageEntity = await _messageRepository.AddAsync(dto.ToEntity());
-        messageEntity.Sentiment = await _sentimentService.AnalyzeSentimentAsync(messageEntity.Text);
-        await Clients.All.SendAsync("ReceiveMessage", messageEntity.ToDto());
+        try
+        {
+            var messageEntity = dto.ToEntity();
+            messageEntity.Sentiment = await _sentimentService.AnalyzeSentimentAsync(messageEntity.Text);
+            await _messageRepository.AddAsync(messageEntity);
+            await Clients.All.SendAsync("ReceiveMessage", messageEntity.ToDto());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Помилка в SendMessage: {ex.Message}");
+            throw;
+        }
     }
 }
