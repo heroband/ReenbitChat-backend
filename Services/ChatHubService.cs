@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace backend.Services;
 
-public class ChatHub : Hub
+public class ChatHubService : Hub
 {
     private readonly IMessageRepository _messageRepository;
     private readonly SentimentService _sentimentService;
 
-    public ChatHub(IMessageRepository messageRepository, SentimentService sentimentService)
+    public ChatHubService(IMessageRepository messageRepository, SentimentService sentimentService)
     {
         _messageRepository = messageRepository;
         _sentimentService = sentimentService;
     }
     public async Task JoinChat(string username)
     {
-        var systemMessage = MessageMapperExtensions.CreateSystemMessage($"{username} приєднався до чату");
+        var systemMessage = MessageMapper.CreateSystemMessage($"{username} приєднався до чату");
         await Clients.All.SendAsync("ReceiveMessage", systemMessage);
     }
     public async Task SendMessage(CreateMessageDto dto)

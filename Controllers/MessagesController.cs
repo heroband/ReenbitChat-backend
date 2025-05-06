@@ -15,7 +15,7 @@ public class MessagesController : ControllerBase
 {
     private readonly IMessageRepository _messageRepository;
 
-    public MessagesController(IMessageRepository messageRepository,  IHubContext<ChatHub> hubContext)
+    public MessagesController(IMessageRepository messageRepository,  IHubContext<ChatHubService> hubContext)
     {
         _messageRepository = messageRepository;
     }

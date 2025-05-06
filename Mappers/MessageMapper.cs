@@ -3,7 +3,7 @@ using backend.Models;
 
 namespace backend.Mappers;
 
-public static class MessageMapperExtensions
+public static class MessageMapper
 {
     public static Message ToEntity(this CreateMessageDto dto)
     {

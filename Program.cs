@@ -22,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddScoped<SentimentService>();
+builder.Services.AddSingleton<SentimentService>();
 
 builder.Services.AddSignalR().AddAzureSignalR(builder.Configuration["Azure:SignalR:ConnectionString"]);
 
@@ -41,6 +41,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Enviro
 app.UseCors("AllowFrontend");
 app.MapControllers();
 app.UseHttpsRedirection();
-app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
+app.MapHub<ChatHubService>("/chatHub").RequireCors("AllowFrontend");
 
 app.Run();
