@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
+/// <summary>
+/// REST API controller for retrieving chat messages
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class MessagesController : ControllerBase
@@ -20,6 +23,10 @@ public class MessagesController : ControllerBase
         _messageRepository = messageRepository;
     }
     
+    /// <summary>
+    /// Returns 10 most recent messages
+    /// </summary>
+    /// <returns>A list of message DTOs</returns>
     [HttpGet]
     public async Task<IActionResult> GetLastMessages()
     {
